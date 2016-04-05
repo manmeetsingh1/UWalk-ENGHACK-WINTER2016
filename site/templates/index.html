@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/gif" sizes="16x16">
+
+    <title>UWalk</title>
+
+    <!-- CSS -->
+    <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='jumbotron.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='assets/js/ie-emulation-modes-warning.js') }}"></script>
+     <script language="javascript">
+            function check(form) { /*function to check userid & password*/
+                /*the following code checkes whether the entered userid and password are matching*/
+                if(form.userid.value == "rowandemp" && form.pswrd.value == "rowandemp") {
+                    window.open('/dashboard')/*opens the target page while Id & password matches*/
+                }
+                else {
+                    alert("Error Password or Username")/*displays error message*/
+                }
+            }
+        </script>
+    <style>
+    body, html { 
+        overflow-x: hidden; 
+        overflow-y: auto;
+    }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">UWalk</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+
+
+           <form name="login" class="navbar-form navbar-right">
+            <div class="form-group">
+              <input placeholder="Username" type="text" name="userid" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <input placeholder="Password" type="password" name="pswrd" class="form-control"/>
+            </div>
+            <input type="button" onclick="check(this.form)" value="Login" class="btn btn-success"  role="button"/>
+        </form>
+
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- JUMBOTRON -->
+    <div class="jumbotron">
+      <div class="container">
+        <div style="width: 50%; float:left">
+          <br>
+          <h1>UWalk</h1>
+            <p>UWalk is an app that tracks your daily commute and plots your total journey onto a map for you. The process is simple, simply start the app at the beginning of your commute, and when you’re done, you can email the data to yourself and input it into our website, which will show you the path you travelled.</p>
+        </div>
+
+        <div style="width: 50%; float:right">
+           <img width="270px" height="493px" src="{{ url_for('static', filename='images/nexus6.png') }}" alt="...">
+        </div>
+       
+        <p><a class="btn btn-primary btn-lg" href="/signup" role="button">Sign Up &raquo;</a></p>
+      </div>
+    </div>
+      <hr>
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

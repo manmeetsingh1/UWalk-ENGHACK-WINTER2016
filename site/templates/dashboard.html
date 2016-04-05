@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/gif" sizes="16x16">
+
+</br>
+</br>
+    <title>Your UWalk Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{{ url_for('static', filename='assets/css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+   
+    <link href="{{ url_for('static', filename='dist/css/dashboard.css') }}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{{ url_for('static', filename='assets/js/ie-emulation-modes-warning.js') }}"></script>
+    <script src="{{ url_for('static', filename='map.js') }}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+       #map {
+        height: 400px;
+        width: 650px;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">UWalk</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+      <div class="container">
+
+      <div class="blog-header">
+      </br>
+        <!--<h1 class="blog-title">Your Dashboard</h1>
+        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>-->
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+
+        
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Your Dashboard</h2>
+            <p id="demo"></p>
+
+<script>
+document.getElementById("demo").innerHTML = Date();
+</script>
+            <!--<p class="blog-post-meta">March 5, 2016</p>-->
+<div>
+    <div id="map"></div>
+  </div>
+
+   <br>
+    <form id="frm1" action="form_action.asp">
+      Enter Latitudes: <input type="text" name="latis" value="44.471521, 43.471972, 43.471345, 43.471174"><br>
+      Enter Longitudes <input type="text" name="lngis" value="-80.553370, -80.552151, -80.551614, -80.551416"><br><br>
+      <input type="button" value="Refresh" OnClick="myFunction()"/>
+      <br>
+    </form> 
+    <script>
+        var lats = [43.472482, 43.475573];
+        var lngs = [-80.552660, -80.543859];
+ 
+        var latsLength = lats.length; 
+        var lngsLegth = lngs.length;
+        var latsInText;
+        var lngsInText;
+      function myFunction() {
+            var x = document.getElementById("frm1");
+            var i;
+            var end = x.length -1; // 3 - 1 = 2
+            latsInText = x.elements[0].value;
+            lngsInText = x.elements[1].value;
+            lats = latsInText.split(", ");
+            lngs = lngsInText.split(", ");
+              var latsLength = lats.length; 
+             var lngsLegth = lngs.length;
+            for(var i =0; i<latsLength; i++){
+              lats[i] = Number(lats[i]);
+              lngs[i] = Number(lngs[i]);
+            }
+            initMap();  
+      }
+     
+      function initMap() {
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        function CalcDistanceBetween(lat1, lon1, lat2, lon2) {
+            //Radius of the earth in:  1.609344 miles,  6371 km  | var R = (6371 / 1.609344);
+            var R = 6371; // Radius of earth in km 
+            var dLat = toRad(lat2-lat1);
+            var dLon = toRad(lon2-lon1); 
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2); 
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            var d = R * c;
+            return d * 1000; // in m?
+        }
+
+
+        function midPoint(lat1, lon1, lat2, lon2){
+
+            var dLon = toRad(lon2 - lon1);
+
+            //convert to radians
+            lat1 = toRad(lat1);
+            lat2 = toRad(lat2);
+            lon1 = toRad(lon1);
+
+            var Bx = Math.cos(lat2) * Math.cos(dLon);
+            var By = Math.cos(lat2) * Math.sin(dLon);
+            var lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+            var lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+            var outputMid = {lat: Math.toDegrees(lat3), lng: Math.toDegrees(lon3)};
+            return outputMid;
+        }
+
+        function toRad(Value) {
+            /** Converts numeric degrees to radians */
+            return Value * Math.PI / 180;
+        }
+        var distBetStartEnd = CalcDistanceBetween(lats[0], lngs[0], lats[latsLength-1], lngs[latsLength-1]);
+        var distBetStartMid = CalcDistanceBetween(lats[0], lngs[0], lats[latsLength/2], lngs[latsLength/2]);
+        var ScaleDist = Math.max(distBetStartMid, distBetStartEnd);
+        var centerPos;
+        if(ScaleDist == distBetStartEnd){
+          centerPos = {lat: lats[latsLength/2], lng: lngs[latsLength/2]};
+        }
+        else{
+          centerPos = midPoint(lats[0], lngs[0], lats[latsLength/2], lngs[latsLength/2]);
+        }
+        if(ScaleDist <= 500){
+          findZoom = 18;
+        }
+        else if(ScaleDist <1000 && ScaleDist > 500){
+          findZoom = 17;
+        }
+        else if(ScaleDist >1000){
+          findZoom = 15;
+        }
+        else if(ScaleDist > 5000){
+          findZoom = 13;
+        }
+        else if(ScaleDist > 20000){
+          findZoom = 8;
+        }
+        else if(ScaleDist >50000){
+          findZoom = 4;
+        }
+        else{
+          findZoom = 1;
+        }
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: findZoom,
+          center:  centerPos,
+          mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+       
+        if(latsLength != lngsLegth){
+          alert("Latitude and Longitude do not have same number of elements");
+        }
+        var flightPlanCoordinates = [];
+        for(var i = 0; i< latsLength; i++){
+          flightPlanCoordinates.push({lat:lats[i], lng: lngs[i]});    
+        }
+        // var flightPlanCoordinates = [
+        //     {lat: 43.47152, lng:-80.553370},
+        //     {lat: 43.471972, lng:-80.553370}
+        //   ];        
+        //   {lat: 43.471521, lng: -80.553370},
+        //   {lat:43.471972, lng: -80.552151},
+        //   {lat: 43.471345, lng: -80.551614},
+        //   {lat: 43.471174, lng: -80.551416}
+        //   // {lat: 21.291, lng: -157.821},
+        //   // {lat: -18.142, lng: 178.431},
+        //   // {lat: -27.467, lng: 153.027}
+        // ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: getRandomColor(),
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        flightPath.setMap(map);
+     }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+    </script>
+
+            <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2895.4398990701948!2d-80.54704628512629!3d43.472289272129466!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882bf6ad02edccff%3A0xdd9df23996268e17!2sUniversity+of+Waterloo!5e0!3m2!1sen!2sca!4v1457146743899" width="550" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>-->
+            <!--<p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>-->
+          </div><!-- /.blog-post -->
+
+         
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+          </br>
+        </br>
+            <h4>Rowan Dempster</h4>
+            <!--<p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>-->
+             <a href="#" class="thumbnail">
+            <img src="{{ url_for('static', filename='images/rowan.jpg') }}" alt="...">
+    </a>
+          </div>
+          <div class="sidebar-module">
+            <h4>Total Steps: </h4>
+            <h4>Daily Average: </h4>
+            
+          </div>
+          <!--<div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ol>
+          </div>-->
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="{{ url_for('static', filename='assets/js/vendor/holder.min.js') }}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{ url_for('static', filename='assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+  </body>
+</html>
